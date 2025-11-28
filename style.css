@@ -3,13 +3,16 @@
     box-sizing: border-box;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 body {
     margin: 0; padding: 0;
-    background-color: #1e1e1e; /* رنگ بدنه نرم‌افزار */
+    background-color: #1e1e1e;
     font-family: 'Vazirmatn', sans-serif;
     height: 100vh;
+    width: 100vw;
+    overflow: hidden;
     display: flex; justify-content: center; align-items: center;
     color: #ecf0f1;
 }
@@ -18,32 +21,37 @@ body {
     position: relative;
     width: 100%; max-width: 900px;
     height: 100%; max-height: 500px;
-    background-color: #2d2d2d; /* رنگ پس‌زمینه پنل */
+    background-color: #2d2d2d;
     border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     overflow: hidden;
     border: 1px solid #444;
 }
 
-/* --- محیط تایم‌لاین --- */
+/* ریسپانسیو موبایل */
+@media (max-width: 600px) {
+    .game-wrapper { max-width: 100%; max-height: 100%; border-radius: 0; border: none; }
+    .dialog-box, .modal { width: 90%; padding: 20px; }
+    #rad { left: 30px; }
+    button { padding: 15px; font-size: 1.2rem; }
+}
+
+/* پس‌زمینه */
 .timeline-tracks {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    /* ایجاد خطوط افقی شبیه ترک‌های لایه‌ها */
     background-image: linear-gradient(#3a3a3a 1px, transparent 1px);
-    background-size: 100% 60px; /* فاصله هر ترک */
-    opacity: 0.5;
-    z-index: 1;
+    background-size: 100% 60px;
+    opacity: 0.5; z-index: 1;
 }
 
 .playhead-line {
-    position: absolute; top: 0; left: 85px; /* درست وسط کاراکتر */
-    width: 2px; height: 100%;
-    background: #3498db; /* خط آبی پلی‌هد */
-    z-index: 2;
-    box-shadow: 0 0 5px #3498db;
+    position: absolute; top: 0; left: 85px;
+    width: 2px; height: 100%; background: #3498db;
+    z-index: 2; box-shadow: 0 0 5px #3498db;
 }
+@media (max-width: 600px) { .playhead-line { left: 55px; } }
 
-/* --- صفحات (Intro & Game Over) --- */
+/* صفحات مودال */
 .active-screen { display: flex !important; }
 .hidden-screen { display: none !important; }
 
@@ -55,142 +63,136 @@ body {
 }
 
 .dialog-box, .modal {
-    background: #252525;
-    padding: 40px; border-radius: 10px;
-    text-align: center;
-    border: 1px solid #555;
+    background: #252525; padding: 40px; border-radius: 10px;
+    text-align: center; border: 1px solid #555;
     box-shadow: 0 0 30px rgba(0,0,0,0.5);
     width: 85%; max-width: 450px;
 }
 
 .rad-avatar {
-    width: 70px; height: 70px;
-    background: #e74c3c; border-radius: 50%;
-    margin: 0 auto 15px;
-    border: 3px solid #fff;
+    width: 70px; height: 70px; background: #e74c3c; border-radius: 50%;
+    margin: 0 auto 15px; border: 3px solid #fff;
     box-shadow: 0 0 15px rgba(231, 76, 60, 0.5);
 }
 
 input {
     padding: 12px; width: 100%; margin: 20px 0;
     border-radius: 4px; border: 1px solid #555;
-    background: #333; color: white;
-    font-family: inherit; text-align: center; font-size: 1rem;
+    background: #333; color: white; font-family: inherit; text-align: center; font-size: 1rem;
 }
 input:focus { outline: 2px solid #3498db; }
 
 button {
-    background: #3498db; color: white;
-    border: none; padding: 12px 30px;
-    border-radius: 4px; cursor: pointer;
-    font-size: 1.1rem; font-family: inherit;
+    background: #3498db; color: white; border: none; padding: 12px 30px;
+    border-radius: 4px; cursor: pointer; font-size: 1.1rem; font-family: inherit;
     transition: 0.2s; width: 100%;
 }
 button:hover { background: #2980b9; }
 
-/* --- بازی --- */
+/* محیط بازی */
 #game-area {
     position: absolute; width: 100%; height: 100%; display: none;
+    cursor: pointer; /* نشانگر موس به شکل دست برای القای قابلیت کلیک */
 }
 
 .hud {
     position: absolute; top: 0; left: 0; right: 0;
-    height: 50px; background: #1a1a1a;
-    border-bottom: 1px solid #444;
+    height: 50px; background: #1a1a1a; border-bottom: 1px solid #444;
     display: flex; justify-content: space-between; align-items: center;
     padding: 0 20px; z-index: 20; font-size: 0.9rem;
 }
 .hud-left { display: flex; gap: 20px; align-items: center; }
 
-/* استایل Ctrl+Z */
 #ctrl-z-indicator {
-    background: #27ae60; color: white;
-    padding: 3px 10px; border-radius: 4px;
-    font-size: 0.8rem; font-weight: bold;
-    animation: pulse 2s infinite;
+    background: #27ae60; color: white; padding: 3px 10px; border-radius: 4px;
+    font-size: 0.8rem; font-weight: bold; animation: pulse 2s infinite;
 }
 @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; box-shadow: 0 0 10px #27ae60; } 100% { opacity: 0.8; } }
 .hidden { display: none !important; }
 
+/* --- استایل جدید پیام فکت (از بالا) --- */
+#fact-bubble {
+    position: absolute;
+    top: 70px; /* کمی پایین‌تر از هدر */
+    left: 50%; transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    border: 2px solid #3498db;
+    text-align: center;
+    min-width: 250px;
+}
+
+/* انیمیشن ورود از بالا */
+@keyframes slideDownFade {
+    0% { top: 0px; opacity: 0; }
+    100% { top: 70px; opacity: 1; }
+}
+
 /* کاراکتر راد */
 #rad {
     position: absolute; bottom: 60px; left: 60px;
-    width: 40px; height: 40px;
-    border-radius: 8px; /* کمی مربعی‌تر برای تم نرم‌افزاری */
+    width: 40px; height: 40px; border-radius: 8px;
     background: #e74c3c;
     box-shadow: 0 0 0 2px white, 0 0 15px rgba(231, 76, 60, 0.6);
-    z-index: 10;
-    display: flex; justify-content: center; align-items: center;
+    z-index: 10; display: flex; justify-content: center; align-items: center;
+    transition: transform 0.1s;
 }
-/* صورت ساده برای راد */
-.rad-face { width: 60%; height: 20%; background: #fff; border-radius: 10px; }
+@media (max-width: 600px) { #rad { left: 30px; } }
 
-/* افکت‌های راد */
+.rad-face { width: 60%; height: 20%; background: #fff; border-radius: 10px; }
 #rad.ghost-mode { opacity: 0.4; filter: grayscale(100%); border: 2px dashed #fff; }
 #rad.magnet-mode { box-shadow: 0 0 0 2px #3498db, 0 0 20px #3498db; }
 
-/* زمین (Track Bar) */
+/* زمین */
 #ground {
     position: absolute; bottom: 0; width: 100%; height: 50px;
-    background: #222; border-top: 2px solid #555; z-index: 5;
-    overflow: hidden;
+    background: #222; border-top: 2px solid #555; z-index: 5; overflow: hidden;
 }
-/* خطوط زمان‌بندی روی زمین */
 .time-markers {
     width: 200%; height: 100%;
     background-image: linear-gradient(90deg, #555 1px, transparent 1px);
-    background-size: 50px 100%;
-    animation: scrollGrid 1s linear infinite;
+    background-size: 50px 100%; animation: scrollGrid 1s linear infinite;
 }
 @keyframes scrollGrid { from { transform: translateX(0); } to { transform: translateX(-50px); } }
 
-
-/* --- آیتم‌ها --- */
-/* موانع: ارورهای رندر (قرمز و گلیچ) */
+/* آیتم‌ها */
 .obstacle {
     position: absolute; bottom: 50px; width: 40px; height: 60px;
-    background: repeating-linear-gradient(
-        45deg,
-        #c0392b,
-        #c0392b 10px,
-        #a93226 10px,
-        #a93226 20px
-    );
-    border: 2px solid #e74c3c;
-    z-index: 8;
-    color: #fff; font-weight: bold; font-size: 10px;
-    display: flex; justify-content: center; align-items: center;
+    background: repeating-linear-gradient(45deg, #c0392b, #c0392b 10px, #a93226 10px, #a93226 20px);
+    border: 2px solid #e74c3c; z-index: 8; color: #fff;
+    font-weight: bold; font-size: 10px; display: flex; justify-content: center; align-items: center;
     text-shadow: 1px 1px 0 #000;
 }
 .obstacle::after { content: "ERR"; }
 
-/* سکه‌ها: کی‌فریم‌ها (لوزی زرد) */
 .keyframe {
     position: absolute; width: 20px; height: 20px;
-    background: #f1c40f;
-    transform: rotate(45deg);
-    border: 2px solid #fff;
-    box-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+    background: #f1c40f; transform: rotate(45deg);
+    border: 2px solid #fff; box-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
     z-index: 7;
 }
 
-/* پاور آپ‌ها */
 .powerup-item {
     position: absolute; width: 32px; height: 32px;
-    background: #333; border: 2px solid #fff;
-    border-radius: 4px; z-index: 9;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; font-weight: bold;
-    box-shadow: 0 0 10px rgba(255,255,255,0.2);
+    background: #333; border: 2px solid #fff; border-radius: 4px;
+    z-index: 9; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: bold; box-shadow: 0 0 10px rgba(255,255,255,0.2);
 }
-.p-ctrlz { color: #2ecc71; border-color: #2ecc71; } /* سبز */
-.p-magnet { color: #3498db; border-color: #3498db; } /* آبی */
-.p-ghost { color: #bdc3c7; border-color: #bdc3c7; } /* خاکستری */
+.p-ctrlz { color: #2ecc71; border-color: #2ecc71; }
+.p-magnet { color: #3498db; border-color: #3498db; }
+.p-ghost { color: #bdc3c7; border-color: #bdc3c7; }
 
-/* نمایش پاورآپ‌های فعال */
 #active-powers {
     position: absolute; top: 60px; right: 15px;
-    display: flex; flex-direction: column; gap: 5px;
+    display: flex; flex-direction: column; gap: 5px; pointer-events: none;
 }
 .power-icon {
     padding: 5px 12px; border-radius: 4px; font-size: 0.75rem; color: white;

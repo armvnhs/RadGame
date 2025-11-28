@@ -2,71 +2,72 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Rad: The Animator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rad Runner</title>
     <link rel="stylesheet" href="style.css">
-    <!-- فونت فارسی وزیر -->
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
     <div class="game-wrapper">
-        <!-- پس‌زمینه تایم‌لاین (ترک‌های افقی) -->
-        <div class="timeline-tracks"></div>
         
-        <!-- خط زمان (Playhead) که ثابت است -->
+        <div class="timeline-tracks"></div>
         <div class="playhead-line"></div>
 
-        <!-- صفحه شروع (دیالوگ راد) -->
+        <!-- صفحه شروع -->
         <div id="intro-screen" class="active-screen">
             <div class="dialog-box">
                 <div class="rad-avatar"></div>
                 <h2>سلام، من راد هستم!</h2>
                 <p>ما بخاطر مشکل انیمیت به یه همکار انیماتور نیاز داریم.<br>اسم تو چیه؟</p>
-                <input type="text" id="player-name-input" placeholder="نام خود را وارد کنید..." maxlength="15">
+                <input type="text" id="player-name-input" placeholder="نام شما..." maxlength="15">
                 <button id="submit-name-btn">شروع پروژه</button>
             </div>
         </div>
 
         <!-- محیط بازی -->
         <div id="game-area">
-            <!-- اطلاعات بالا (HUD) -->
+            <!-- هدر بازی (HUD) -->
             <div class="hud">
                 <div class="hud-left">
-                    <div class="player-info">انیماتور: <span id="display-name" style="color:#3498db">---</span></div>
-                    <!-- نشانگر وضعیت Ctrl+Z -->
-                    <div id="ctrl-z-indicator" class="hidden">
-                        <span class="ctrl-icon">↩ Ctrl+Z</span> (فعال)
-                    </div>
+                    <span>انیماتور: <strong id="display-name">---</strong></span>
+                    <span id="ctrl-z-indicator" class="hidden">↩ Ctrl+Z (فعال)</span>
                 </div>
-                <div class="score-box">Keyframes: <span id="score-val">0</span></div>
+                <div class="hud-right">
+                    <span>Keyframes: <strong id="score-val">0</strong></span>
+                </div>
             </div>
 
-            <!-- نشانگر قدرت‌های زمان‌دار (آهنربا و روح) -->
+            <!-- پیام فکت (جایگاه جدید: مستقل از کاراکتر) -->
+            <div id="fact-bubble" class="hidden"></div>
+
+            <!-- لیست قدرت‌های فعال -->
             <div id="active-powers">
                 <div id="power-magnet" class="power-icon hidden">🧲 آهنربا</div>
                 <div id="power-ghost" class="power-icon hidden">👻 روح</div>
             </div>
-            
+
             <!-- کاراکتر راد -->
             <div id="rad">
                 <div class="rad-face"></div>
             </div>
-            
-            <!-- زمین تایم‌لاین -->
+
+            <!-- زمین -->
             <div id="ground">
                 <div class="time-markers"></div>
             </div>
+        </div>
 
-            <!-- صفحه باخت -->
-            <div id="game-over-screen" class="hidden-screen">
-                <div class="modal">
-                    <h1 style="color:#e74c3c; font-family: monospace;">ERROR 404</h1>
-                    <p id="end-msg">رندر متوقف شد...</p>
-                    <button id="retry-btn">رندر مجدد (Space)</button>
-                </div>
+        <!-- صفحه باخت (Game Over) -->
+        <div id="game-over-screen" class="hidden-screen">
+            <div class="modal">
+                <h1 style="color:#e74c3c; font-size: 3.5rem; margin:0 0 10px 0; font-family: sans-serif;">Render Failed</h1>
+                <h2 style="color:#ccc; margin-bottom: 20px;">سیستم هنگ کرد تو هیچکاره ای</h2>
+                <p id="end-msg" style="direction: rtl;">...</p>
+                <button id="retry-btn">رندر دوباره (Space/Click)</button>
             </div>
         </div>
+
     </div>
 
     <script src="script.js"></script>
